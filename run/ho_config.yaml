@@ -1,0 +1,74 @@
+out_dir: results
+device: auto  # {'cpu', 'gpu', 'auto'}
+dataset:
+  format: ho_trajectory  # the format needs to be compatiable with the loader.
+  name: collision_rome_res9.csv  # file name of the transaction dataset.
+  is_hetero: False 
+  dir: /local/data1/users/anadiri/collisions  # dataset directory.
+  task: link_pred
+  shuffle: True  # must set to False to if using time series data.
+  task_type: classification
+  transductive: True
+  split: [0.8, 0.1, 0.1]
+  augment_feature: []
+  augment_feature_dims: [0]
+  augment_feature_repr: position # or original
+  augment_label: ''
+  augment_label_dims: 0
+  transform: none
+  edge_encoder: False
+  edge_encoder_name: roland
+  edge_encoder_bn: True
+  node_encoder: False
+  node_encoder_name: roland
+  node_encoder_bn: True
+transaction:
+  keep_ratio: linear
+  snapshot: True
+  snapshot_freq: 1s  # S=step, M=monthly, W=weekly, D=daily.
+  check_snapshot: False
+  history: rolling
+  horizon: 1
+  pred_mode: at
+  loss: supervised
+  feature_int_dim: 8  # number of categorical edge features.
+  # number of unique values for each categorical edge feature, for example, 1017 means the first categorical
+  # edge feature (which is PayerBank in BSI dataset) has 1017 unique values. This needs to be modified based on
+  # the dataset.
+  feature_edge_int_num: []
+  feature_node_int_num: []
+  feature_amount_dim: 1
+  feature_edge_int_num: []
+  feature_int_dim: 1
+  feature_node_int_num: []
+  feature_time_dim: 1
+train:
+  batch_size: 32
+  eval_period: 5
+  ckpt_period: 400
+  # See ./GraphGym_dev/graphgym/contrib/train/ for avaliable for `mode`.
+  mode: new_hetero  # which training module to use.
+model:
+  # See ./GraphGym_dev/graphgym/contrib/network/ for all options.
+  type: hetero_gnn_recurrent
+  loss_fun: cross_entropy
+  edge_decoding: concat  # Only use node embeddings.
+  graph_pooling: add
+gnn:
+  layers_pre_mp: 2  # number of fully-connected before GNN.
+  layers_mp: 2  # number of GNN layers.
+  layers_post_mp: 2  # number of fully-connected after GNN.
+  dim_inner: 128  # dimension of hidden layers in GNN.
+  # See ./GraphGym_dev/graphgym/contrib/layer/ for all options.
+  layer_type: residual_edge_conv #generaledgeheteconv_complete
+  stage_type: stack
+  batchnorm: True
+  act: prelu
+  dropout: 0.0
+  agg: add
+  att_heads: 4
+  normalize_adj: False
+optim:
+  optimizer: adam
+  base_lr: 0.01
+  max_epoch: 100

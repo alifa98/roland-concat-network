@@ -49,13 +49,22 @@ def dataset_cfg_setup_fixed_split(name: str):
         else:
             cfg.train.start_compute_mrr = 109
 
-    elif name in ['CollegeMsg.txt']:
+    elif name in ['CollegeMsg.txt']: 
         cfg.dataset.format = 'uci_message'
         cfg.dataset.edge_dim = 1
         cfg.dataset.edge_encoder_name = 'roland_general'
         cfg.dataset.node_encoder = False
         cfg.dataset.split = [0.71, 0.09, 0.2]
         cfg.transaction.snapshot_freq = '190080s'
+        cfg.train.start_compute_mrr = 72
+
+    elif name in ['test_rome.csv', 'collision_rome_res7.csv']: 
+        cfg.dataset.format = 'ho_trajectory'
+        cfg.dataset.edge_dim = 1
+        cfg.dataset.edge_encoder_name = 'roland_general'
+        cfg.dataset.node_encoder = False
+        cfg.dataset.split = [0.71, 0.09, 0.2]
+        cfg.transaction.snapshot_freq = '1'
         cfg.train.start_compute_mrr = 72
 
     elif name in ['reddit-body.tsv', 'reddit-title.tsv']:
@@ -103,6 +112,13 @@ def dataset_cfg_setup_live_update(name: str):
 
     elif name in ['CollegeMsg.txt']:
         cfg.dataset.format = 'uci_message'
+        cfg.dataset.edge_dim = 1
+        cfg.dataset.edge_encoder_name = 'roland_general'
+        cfg.dataset.node_encoder = False
+        cfg.transaction.snapshot_freq = 'W'
+
+    elif name in ['test_rome.csv', 'collision_rome_res7.csv']:
+        cfg.dataset.format = 'ho_trajectory'
         cfg.dataset.edge_dim = 1
         cfg.dataset.edge_encoder_name = 'roland_general'
         cfg.dataset.node_encoder = False

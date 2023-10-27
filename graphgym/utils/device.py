@@ -4,7 +4,7 @@ import numpy as np
 import pdb
 from graphgym.config import cfg
 import logging
-
+import os
 
 def get_gpu_memory_map():
     '''Get the current gpu usage.'''
@@ -17,7 +17,7 @@ def get_gpu_memory_map():
     return gpu_memory
 
 
-def auto_select_device(memory_max=8000, memory_bias=200, strategy='random'):
+def auto_select_device(memory_max=8000, memory_bias=200, strategy='specific'):
     '''Auto select GPU device'''
     if cfg.device != 'cpu' and torch.cuda.is_available():
         if cfg.device == 'auto':
@@ -40,6 +40,10 @@ def auto_select_device(memory_max=8000, memory_bias=200, strategy='random'):
                 logging.info(
                     'Random select GPU, select GPU {} with mem: {}'.format(
                         cuda, memory_raw[cuda]))
+            
+            elif strategy == 'specific':
+                os.environ['CUDA_VISIBLE_DEVICES'] = '6'
+                cuda = 0
 
             cfg.device = 'cuda:{}'.format(cuda)
     else:
