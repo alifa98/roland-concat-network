@@ -47,10 +47,10 @@ train:
   eval_period: 5
   ckpt_period: 400
   # See ./GraphGym_dev/graphgym/contrib/train/ for avaliable for `mode`.
-  mode: new_hetero  # which training module to use.
+  mode: new  # which training module to use.
 model:
   # See ./GraphGym_dev/graphgym/contrib/network/ for all options.
-  type: hetero_gnn_recurrent
+  type: gnn_recurrent
   loss_fun: cross_entropy
   edge_decoding: concat  # Only use node embeddings.
   graph_pooling: add
@@ -60,7 +60,7 @@ gnn:
   layers_post_mp: 2  # number of fully-connected after GNN.
   dim_inner: 128  # dimension of hidden layers in GNN.
   # See ./GraphGym_dev/graphgym/contrib/layer/ for all options.
-  layer_type: residual_edge_conv #generaledgeheteconv_complete
+  layer_type: gconv_gru #generaledgeheteconv_complete
   stage_type: stack
   batchnorm: True
   act: prelu
