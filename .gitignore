@@ -1,2 +1,6 @@
 graphgym.egg-info
 **/*.csv
+
+## python
+**/*.pyc
+run/results
